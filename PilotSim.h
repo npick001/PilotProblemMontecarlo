@@ -9,6 +9,8 @@ class Pilot{
     double normalX[trialSize];
     double normalY[trialSize];
 public:
+    Pilot();
+    Pilot(Pilot& pilotName);
     void generateRandPoints();
     double getRand(double stdevX, double mean);
     int inRadius();

@@ -5,8 +5,7 @@
 
 int main(){
     Pilot nick;
-    int testTrials = trialSize;
-    nick.generateRandPoints(nick.getMean(), nick.getStdevX(), nick.getStdevY());
+    nick.generateRandPoints();
     nick.test();
 }
  

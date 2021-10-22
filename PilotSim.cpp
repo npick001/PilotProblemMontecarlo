@@ -6,6 +6,22 @@
 
 //Step 1: Get normal variates for x and y
 //insert code for random variates
+Pilot::Pilot(){
+    this->mean = 0;
+    this->stdevX = 1;
+    this->stdevY = 1;
+    this->radius = 1;
+    for (int i = 0; i < trialSize; i++){
+        this->normalX[i] = 0;
+        this->normalY[i] = 0;
+    }
+}
+Pilot::Pilot(Pilot& pilotName) {
+    this->mean = pilotName.getMean();
+    this->stdevX = pilotName.getStdevX();
+    this->stdevY = pilotName.getStdevY();
+    this->radius = pilotName.getRadius();
+}
 std::default_random_engine generator; 
 double Pilot::getRand(double stdevX, double mean){
     std::normal_distribution<double> distribution(mean, stdevX);
