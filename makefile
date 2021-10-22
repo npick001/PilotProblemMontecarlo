@@ -1,6 +1,6 @@
-all: main.cpp PilotSim.cpp
-	g++ main.o PilotSim.o -o program
-
+all: main.cpp PilotSim.o
+	g++ main.cpp PilotSim. -o pilotSim
+PilotSim.o: PilotSim.h PilotSim.cpp
 clean:
 	rm *.o
 	

@@ -4,18 +4,15 @@
 #include <iostream>
 
 int main(){
-    PilotSim x;
-    x.mean = 0;
-    x.stdevX = 300;
-    x.stdevY = 150;
-    x.radius = 125;
+    Pilot nick;
     int testTrials = trialSize;
-    generateRandPoints(x, x.mean, x.stdevX, x.stdevY);
-    int totalIn = inRadius(x, x.radius);
+    nick.generateRandPoints(nick.getMean(), nick.getStdevX(), nick.getStdevY());
+    int totalIn = nick.inRadius(nick.getRadius());
     //DO TEST HERE
-    
+    double *normalX = nick.getnX();
+    double *normalY = nick.getnY();
     for(int i = 0; i < testTrials; i++){
-        std::cout << x.normalX[i] << ", " << x.normalY[i] << std::endl;
+        std::cout << normalX[i] << ", " << normalY[i] << std::endl;
     }
     std::cout << "# in radius: " << totalIn << std::endl;
 

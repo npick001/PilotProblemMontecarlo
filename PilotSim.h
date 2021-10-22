@@ -1,13 +1,20 @@
 
-void generateRandPoints(PilotSim x, double mean, double stdevX, double stdevY);
-double getRand(PilotSim x, double stdevX, double mean);
 const int trialSize = 10000;
-struct PilotSim{
+class Pilot{
     double mean;
     double stdevX;
     double stdevY;
     double radius;
     double normalX[trialSize];
-    double normalY[trialSize]; 
+    double normalY[trialSize];
+public:
+    void generateRandPoints(double mean, double stdevX, double stdevY);
+    double getRand(double stdevX, double mean);
+    int inRadius(double radius);
+    double getMean(){return mean;}
+    double getStdevX(){return stdevX;}
+    double getStdevY(){return stdevY;}
+    double getRadius(){return radius;}
+    double *getnX(){return normalX;}
+    double *getnY(){return normalY;}
 };
-int inRadius(PilotSim x, double radius);
