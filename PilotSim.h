@@ -9,3 +9,4 @@ struct PilotSim{
     double normalX[trialSize];
     double normalY[trialSize]; 
 };
+int inRadius(double radius);

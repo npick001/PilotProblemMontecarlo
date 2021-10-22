@@ -1,6 +1,6 @@
-pilotSim: main.o PilotSim.o
-	gcc -g -Wall -o pilotSim main.o PilotSim.o
-main.o: main.cpp
-PilotSim.o: PilotSim.h PilotSim.cpp
+all: main.cpp PilotSim.cpp
+	g++ main.o PilotSim.o -o program
+
 clean:
-	rm main.o PilotSim.o
+	rm *.o
+	
