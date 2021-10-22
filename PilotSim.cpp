@@ -12,13 +12,13 @@ double Pilot::getRand(double stdevX, double mean){
     double value = distribution(generator);
     return value;
 };
-void Pilot::generateRandPoints(double mean, double stdevX, double stdevY){
+void Pilot::generateRandPoints(){
     for(int i = 0; i <= trialSize; ++i){
-        normalX[i] = getRand(stdevX, mean);
-        normalY[i] = getRand(stdevY, mean);
+        this->normalX[i] = this->getRand(this->stdevX, this->mean);
+        this->normalY[i] = this->getRand(this->stdevY, this->mean);
     }
 }
-int Pilot::inRadius(double radius){
+int Pilot::inRadius(){
     int underDistance = 0;
     for(int i = 0; i < trialSize; i++){
         double distance = sqrt(pow(this->normalX[i],2) + pow(this->normalY[i],2));
@@ -32,6 +32,6 @@ void Pilot::test(){
     for(int i = 0; i < trialSize; i++){
         std::cout << this->normalX[i] << ", " << this->normalY[i] << std::endl;
     }
-    std::cout << "# in radius: " << this->inRadius(this->radius) << std::endl;
+    std::cout << "# in radius: " << this->inRadius() << std::endl;
 
 }

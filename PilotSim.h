@@ -1,5 +1,6 @@
 
 const int trialSize = 10000;
+//Represents each Pilot we would like to test
 class Pilot{
     double mean;
     double stdevX;
@@ -8,9 +9,9 @@ class Pilot{
     double normalX[trialSize];
     double normalY[trialSize];
 public:
-    void generateRandPoints(double mean, double stdevX, double stdevY);
+    void generateRandPoints();
     double getRand(double stdevX, double mean);
-    int inRadius(double radius);
+    int inRadius();
     double getMean(){return mean;}
     double getStdevX(){return stdevX;}
     double getStdevY(){return stdevY;}
