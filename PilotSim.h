@@ -17,4 +17,5 @@ public:
     double getRadius(){return radius;}
     double *getnX(){return normalX;}
     double *getnY(){return normalY;}
+    void test();
 };

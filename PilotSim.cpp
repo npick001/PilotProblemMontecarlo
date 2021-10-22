@@ -28,3 +28,10 @@ int Pilot::inRadius(double radius){
     }
     return underDistance;
 }
+void Pilot::test(){
+    for(int i = 0; i < trialSize; i++){
+        std::cout << this->normalX[i] << ", " << this->normalY[i] << std::endl;
+    }
+    std::cout << "# in radius: " << this->inRadius(this->radius) << std::endl;
+
+}
