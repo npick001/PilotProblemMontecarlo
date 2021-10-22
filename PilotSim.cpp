@@ -17,7 +17,6 @@ void generateRandPoints(double mean, double stdevX, double stdevY){
     for(int i = 0; i <= trialSize; ++i){
         x.normalX[i] = getRand(stdevX, mean);
         x.normalY[i] = getRand(stdevY, mean);
-        std::cout << x.normalX[i] << ", " << x.normalY[i] << std::endl;
     }
 }
 int inRadius(double radius){
