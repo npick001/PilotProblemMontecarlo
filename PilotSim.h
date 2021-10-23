@@ -11,6 +11,7 @@ class Pilot{
 public:
     Pilot();
     Pilot(Pilot& pilotName);
+    void run(Pilot& pilotName);
     void generateRandPoints();
     double getRand(double stdevX, double mean);
     int inRadius();

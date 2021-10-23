@@ -5,7 +5,6 @@
 
 int main(){
     Pilot nick;
-    nick.generateRandPoints();
-    nick.test();
+    nick.run();
 }
  

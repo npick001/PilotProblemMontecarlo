@@ -49,5 +49,8 @@ void Pilot::test(){
         std::cout << this->normalX[i] << ", " << this->normalY[i] << std::endl;
     }
     std::cout << "# in radius: " << this->inRadius() << std::endl;
-
+}
+void Pilot::run(Pilot& pilotName){
+    pilotName.generateRandPoints();
+    pilotName.test();
 }
