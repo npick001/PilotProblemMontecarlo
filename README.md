@@ -8,3 +8,5 @@ We are trying to find the probability that a pilot will hit within 300ft of the 
 
 Bombing impacts are assumed to be normally distributed when there are 30 trials.
 //I will be trying 10,000 trials
+
+Program will provide data for the sample mean, variance, and a 95% confidence interval for the mean.
