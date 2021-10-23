@@ -1,6 +1,6 @@
-# PilotProblemMonteCarloSim
+## PilotProblemMonteCarloSim
 
-Problem excel solution posted. C++ program is almost finished.
+#Problem excel solution posted. C++ program is almost finished.
 
 Problem Description:
 
