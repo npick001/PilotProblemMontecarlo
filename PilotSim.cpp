@@ -148,20 +148,20 @@ void Pilot::doReplications(){
     double total = 0;
     std::cout << "Replication: " << "Outcome: " << "Mean: " << "Confidence Interval: " 
         << "Alpha: " << "   t: " << std::endl;
-    for(int i = 0; i < replications; i++){
+    for(int i = 1; i <= replications; i++){
         this->run();
-        outcomes[i] = this->probHitTarget;
-        total += outcomes[i];
-        std::cout << std::setw(10) << i << std::setw(10) << outcomes[i] 
+        outcomes[i-1] = this->probHitTarget;
+        total += outcomes[i-1];
+        std::cout << std::setw(10) << i << std::setw(10) << outcomes[i-1] 
         << std::setw(6) << this->finalMean;
-        if (i == 0){
+        if (i == 1){
             std::cout << std::setw(21) << confidenceInterval << std::setw(7)
                 << alpha << "   " << this->getTvalue();
         }  
-        if (i == 2){
+        if (i == 3){
             std::cout << std::setw(27) << "Mean is between ";
         } 
-        if (i == 3){
+        if (i == 4){
             std::cout << std::setw(17) 
                 << (this->getFinalMean() - t * sqrt(this->getVariance()/trialSize))
                 << "   "
