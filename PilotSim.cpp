@@ -2,34 +2,45 @@
 #include <ctime>
 #include <iostream>
 #include <random>
+#include <iomanip>
 #include "PilotSim.h"
 
-//Step 1: Get normal variates for x and y
-//insert code for random variates
 Pilot::Pilot(){
-    this->mean = 0;
+    this->meanX = 0;
+    this->meanY = 0;
+    this->variance = 0;
+    this->finalMean = 0;
     this->stdevX = 1;
     this->stdevY = 1;
     this->radius = 1;
     this->probHitTarget = 0;
+    this->confidenceInterval = .95;
+    this->alpha = 1 - confidenceInterval;
+    this->t = 0;
     for (int i = 0; i < trialSize; i++){
         this->normalX[i] = 0;
         this->normalY[i] = 0;
     }
 }
 Pilot::Pilot(const Pilot& pilotName) {
-    this->mean = pilotName.mean;
+    this->meanX = pilotName.meanX;
+    this->meanY = pilotName.meanY;
+    this->variance = pilotName.variance;
+    this->finalMean = pilotName.finalMean;
     this->stdevX = pilotName.stdevX;
     this->stdevY = pilotName.stdevY;
     this->radius = pilotName.radius;
     this->probHitTarget = pilotName.probHitTarget;
+    this->confidenceInterval = pilotName.confidenceInterval;
+    this->alpha = pilotName.alpha;
+
     for(int i = 0; i < trialSize; i++){
         this->normalX[i] = pilotName.normalX[i];
         this->normalY[i] = pilotName.normalY[i];
     }
 }
 double rationalApprox(double t){
- // Abramowitz and Stegun formula 26.2.23.
+    // Abramowitz and Stegun formula 26.2.23.
     // The absolute value of the error should be less than 4.5 e-4.
     double c[] = {2.515517, 0.802853, 0.010328};
     double d[] = {1.432788, 0.189269, 0.001308};
@@ -42,30 +53,30 @@ double normalInversePoints(double prob){
         std::cout << "Invalid argument, " << prob 
         << "should be between 0 and 1." << std::endl;
     }
-
-    // See article above for explanation of this section.
     if (prob < 0.5)
     {
         // F^-1(p) = - G^-1(p)
-        return -rationalApprox( sqrt(-2.0*log(prob)) );
+        return -(rationalApprox(sqrt(-2.0*log(prob))));
     }
     else
     {
         // F^-1(p) = G^-1(1-p)
-        return rationalApprox( sqrt(-2.0*log(1-prob)) );
+        return rationalApprox(sqrt(-2.0*log(1-prob)));
     }
 }
 
 std::default_random_engine generator; 
-double Pilot::getRand(double stdevX, double mean){
-    std::normal_distribution<double> distribution(mean, stdevX);
+double Pilot::getRand(double stdev, double mean){
+    std::normal_distribution<double> distribution(mean, stdev);
     double value = distribution(generator);
     return value;
 };
 void Pilot::generateRandPoints(){
     for(int i = 0; i <= trialSize; ++i){
-        this->normalX[i] = this->normalInversePoints(getRand(this->stdevX, this->mean));
-        this->normalY[i] = this->normalInversePoints(getRand(this->stdevY, this->mean));
+        //this->normalX[i] = getRand(this->stdevX, this->mean);
+        //this->normalY[i] = getRand(this->stdevY, this->mean);
+        this->normalX[i] = (this->stdevX * this->getRand(this->stdevX, this->meanX)) + this->meanX;
+        this->normalY[i] = (this->stdevY * this->getRand(this->stdevY, this->meanY)) + this->meanY;
     }
 }
 int Pilot::inRadius(){
@@ -80,20 +91,29 @@ int Pilot::inRadius(){
 }
 void Pilot::test(){
     for(int i = 0; i < trialSize; i++){
-        std::cout << this->normalX[i] << ", " << this->normalY[i] << std::endl;
+        std::cout << std::setprecision(7) << this->normalX[i] << ", " 
+        << this->normalY[i] << std::endl;
     }
     std::cout << "# in radius: " << this->inRadius() << std::endl;
+    this->probHitTarget = (this->inRadius() / trialSize);
+    std::cout << "Probability of hitting target within radius: "
+        << probHitTarget << std::endl;
 }
 void Pilot::run(){
     this->generateRandPoints();
-    this->test();
+    //this->test();
 }
-bool Pilot::operator=(const Pilot& pilotName){
-    this->mean = pilotName.mean;
+void Pilot::operator=(const Pilot& pilotName){
+    this->meanX = pilotName.meanX;
+    this->meanY = pilotName.meanY;
+    this->variance = pilotName.variance;
+    this->finalMean = pilotName.finalMean;
     this->stdevX = pilotName.stdevY;
     this->stdevY = pilotName.stdevY;
     this->radius = pilotName.radius;
     this->probHitTarget = pilotName.probHitTarget;
+    this->confidenceInterval = pilotName.confidenceInterval;
+    this->alpha = pilotName.alpha;
     for(int i = 0; i < trialSize; i++){
         this->normalX[i] = pilotName.normalX[i];
         this->normalY[i] = pilotName.normalY[i];
@@ -104,4 +124,49 @@ bool Pilot::operator<(const Pilot& pilotName){
 }
 bool Pilot::operator>(const Pilot& pilotName){
     return (this->probHitTarget > pilotName.probHitTarget);
+}
+double Pilot::getTvalue(){
+    std::student_t_distribution<double> tDistribution(replications-1);
+    this->t = tDistribution(generator);
+    return t;
+}
+double Pilot::getVariance(){
+    double total = 0;
+    for(int i = 0; i < replications; i++){
+        total += pow((this->outcomes[i] - this->finalMean),2);
+    }
+    return (total / (replications - 1));
+}
+double Pilot::getFinalMean(){
+    double total = 0;
+    for(int i = 0; i < replications; i++){
+        total += outcomes[i];
+    }
+    return (total / replications);
+}
+void Pilot::doReplications(){
+    double total = 0;
+    std::cout << "Replication: " << "Outcome: " << "Mean: " << "Confidence Interval: " 
+        << "Alpha: " << "   t: " << std::endl;
+    for(int i = 0; i < replications; i++){
+        this->run();
+        outcomes[i] = this->probHitTarget;
+        total += outcomes[i];
+        std::cout << std::setw(10) << i << std::setw(10) << outcomes[i] 
+        << std::setw(6) << this->finalMean;
+        if (i == 0){
+            std::cout << std::setw(21) << confidenceInterval << std::setw(7)
+                << alpha << "   " << this->getTvalue();
+        }  
+        if (i == 2){
+            std::cout << std::setw(27) << "Mean is between ";
+        } 
+        if (i == 3){
+            std::cout << std::setw(17) 
+                << (this->getFinalMean() - t * sqrt(this->getVariance()/trialSize))
+                << "   "
+                << (this->getFinalMean() + t * sqrt(this->getVariance()/trialSize));
+        }
+        std::cout << '\n';
+    }
 }

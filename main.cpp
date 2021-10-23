@@ -4,7 +4,9 @@
 #include <iostream>
 
 int main(){
+    
     Pilot nick;
     nick.run();
+    nick.doReplications();
 }
  
