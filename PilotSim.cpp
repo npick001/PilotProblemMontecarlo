@@ -10,9 +10,9 @@ Pilot::Pilot(){
     this->meanY = 0;
     this->variance = 0;
     this->finalMean = 0;
-    this->stdevX = 1;
-    this->stdevY = 1;
-    this->radius = 1;
+    this->stdevX = 500;
+    this->stdevY = 250;
+    this->radius = 300;
     this->probHitTarget = 0;
     this->confidenceInterval = .95;
     this->alpha = 1 - confidenceInterval;
@@ -73,8 +73,9 @@ double Pilot::getRand(double stdev, double mean){
 };
 void Pilot::generateRandPoints(){
     for(int i = 0; i <= trialSize; ++i){
-        //this->normalX[i] = getRand(this->stdevX, this->mean);
-        //this->normalY[i] = getRand(this->stdevY, this->mean);
+        //get x and y variates
+        // x = Z*stdevX + meanX
+        // y = Z*stdevY + meanY
         this->normalX[i] = (this->stdevX * this->getRand(this->stdevX, this->meanX)) + this->meanX;
         this->normalY[i] = (this->stdevY * this->getRand(this->stdevY, this->meanY)) + this->meanY;
     }
@@ -90,10 +91,10 @@ int Pilot::inRadius(){
     return underDistance;
 }
 void Pilot::test(){
-    for(int i = 0; i < trialSize; i++){
+    /*for(int i = 0; i < trialSize; i++){
         std::cout << std::setprecision(7) << this->normalX[i] << ", " 
         << this->normalY[i] << std::endl;
-    }
+    }*/
     std::cout << "# in radius: " << this->inRadius() << std::endl;
     this->probHitTarget = (this->inRadius() / trialSize);
     std::cout << "Probability of hitting target within radius: "
@@ -101,7 +102,8 @@ void Pilot::test(){
 }
 void Pilot::run(){
     this->generateRandPoints();
-    //this->test();
+    this->probHitTarget = (this->inRadius() / trialSize);
+    //this->doReplications();
 }
 void Pilot::operator=(const Pilot& pilotName){
     this->meanX = pilotName.meanX;
@@ -145,15 +147,13 @@ double Pilot::getFinalMean(){
     return (total / replications);
 }
 void Pilot::doReplications(){
-    double total = 0;
     std::cout << "Replication: " << "Outcome: " << "Mean: " << "Confidence Interval: " 
         << "Alpha: " << "   t: " << std::endl;
     for(int i = 1; i <= replications; i++){
         this->run();
         outcomes[i-1] = this->probHitTarget;
-        total += outcomes[i-1];
         std::cout << std::setw(10) << i << std::setw(10) << outcomes[i-1] 
-        << std::setw(6) << this->finalMean;
+        << std::setw(6) << this->getFinalMean();
         if (i == 1){
             std::cout << std::setw(21) << confidenceInterval << std::setw(7)
                 << alpha << "   " << this->getTvalue();
