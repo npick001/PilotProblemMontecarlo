@@ -7,6 +7,6 @@ int main(){
 
     Pilot nick;
     nick.run();
-    nick.doReplications();
+    //nick.doReplications();
 }
  

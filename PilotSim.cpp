@@ -3,6 +3,7 @@
 #include <iostream>
 #include <random>
 #include <iomanip>
+#include <cmath>
 #include "PilotSim.h"
 
 Pilot::Pilot(){
@@ -76,8 +77,8 @@ void Pilot::generateRandPoints(){
         //get x and y variates
         // x = Z*stdevX + meanX
         // y = Z*stdevY + meanY
-        this->normalX[i] = (this->stdevX * this->getRand(this->stdevX, this->meanX)) + this->meanX;
-        this->normalY[i] = (this->stdevY * this->getRand(this->stdevY, this->meanY)) + this->meanY;
+        this->normalX[i] = this->getRand(this->stdevX, this->meanX);
+        this->normalY[i] = this->getRand(this->stdevY, this->meanY);
     }
 }
 int Pilot::inRadius(){
@@ -91,18 +92,19 @@ int Pilot::inRadius(){
     return underDistance;
 }
 void Pilot::test(){
-    /*for(int i = 0; i < trialSize; i++){
+    for(int i = 0; i < trialSize; i++){
         std::cout << std::setprecision(7) << this->normalX[i] << ", " 
         << this->normalY[i] << std::endl;
-    }*/
+    }
     std::cout << "# in radius: " << this->inRadius() << std::endl;
-    this->probHitTarget = (this->inRadius() / trialSize);
+    int inRad = this->inRadius();
+    this->probHitTarget = inRad / trialSize;
     std::cout << "Probability of hitting target within radius: "
-        << probHitTarget << std::endl;
+        << this->probHitTarget << std::endl;
 }
 void Pilot::run(){
     this->generateRandPoints();
-    this->probHitTarget = (this->inRadius() / trialSize);
+    this->test();
     //this->doReplications();
 }
 void Pilot::operator=(const Pilot& pilotName){
@@ -169,4 +171,13 @@ void Pilot::doReplications(){
         }
         std::cout << '\n';
     }
+}
+void Pilot::operator<<(const Pilot& pilotName){
+    std::cout << "X standard deviation: " << pilotName.stdevX << '\n'
+        << "Y standard deviation: " << pilotName.stdevY << '\n' 
+        << "Probability of the pilot hitting the target: " << pilotName.probHitTarget;
+}
+void Pilot::operator>>(const Pilot& pilotName){
+    std::cin >> pilotName.meanX >> pilotName.meanY >> pilotName.probHitTarget
+        >> pilotName.confidenceInterval;
 }

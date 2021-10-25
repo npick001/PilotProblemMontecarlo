@@ -24,7 +24,7 @@ public:
     void generateRandPoints();
     double rationalApprox(double x);
     double normalInversePoints(double prob);
-    double getRand(double stdevX, double mean);
+    double getRand(double stdev, double mean);
     double getTvalue();
     double getVariance();
     double getFinalMean();
@@ -42,5 +42,7 @@ public:
     void test();
     void operator=(const Pilot& pilotName);
     bool operator<(const Pilot& pilotName);
+    void operator<<(const Pilot& pilotName);
     bool operator>(const Pilot& pilotName);
+    void operator>>(const Pilot& pilotName);
 };
