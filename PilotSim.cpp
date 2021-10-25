@@ -58,12 +58,15 @@ void Pilot::generateRandPoints(){
 }
 int Pilot::inRadius(){
     int underDistance = 0;
+    double distance[trialSize];
     for(int i = 0; i < trialSize; i++){
-        double distance = sqrt(pow(this->normalX[i],2) + pow(this->normalY[i],2));
-        if(distance <= this->radius){
+        distance[i] = sqrt(pow(this->normalX[i],2) + pow(this->normalY[i],2));
+        if(distance[i] <= this->radius){
             underDistance++;
         }
+        this->avgDistance += distance[i];
     }
+    this->avgDistance /= trialSize;
     return underDistance;
 }
 void Pilot::test(){
@@ -74,8 +77,9 @@ void Pilot::test(){
     std::cout << "# in radius: " << this->inRadius() << std::endl;
     int inRad = this->inRadius();
     this->probHitTarget = inRad / trialSize;
+    std::cout << "Average Distance: " << avgDistance << '\n';
     std::cout << "Probability of hitting target within radius: "
-        << this->probHitTarget << std::endl;
+        << this->probHitTarget << '\n';
 }
 void Pilot::run(){
     this->generateRandPoints();

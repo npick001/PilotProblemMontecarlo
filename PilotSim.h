@@ -11,6 +11,7 @@ class Pilot{
     double stdevY;
     double radius;
     double probHitTarget;
+    double avgDistance;
     double normalX[trialSize];
     double normalY[trialSize];
 public:
