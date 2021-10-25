@@ -41,7 +41,5 @@ public:
     void test();
     void operator=(const Pilot& pilotName);
     bool operator<(const Pilot& pilotName);
-    void operator<<(const Pilot& pilotName);
     bool operator>(const Pilot& pilotName);
-    void operator>>(const Pilot& pilotName);
 };

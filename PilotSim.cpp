@@ -76,15 +76,16 @@ void Pilot::test(){
     }
     std::cout << "# in radius: " << this->inRadius() << std::endl;
     int inRad = this->inRadius();
-    this->probHitTarget = inRad / trialSize;
-    std::cout << "Average Distance: " << avgDistance << '\n';
+    this->probHitTarget = static_cast<double>(inRad) / static_cast<double>(trialSize);
+    std::cout << "Average Distance: " << this->avgDistance << '\n';
     std::cout << "Probability of hitting target within radius: "
         << this->probHitTarget << '\n';
 }
 void Pilot::run(){
     this->generateRandPoints();
-    this->test();
-    //this->doReplications();
+    this->probHitTarget = static_cast<double>(this->inRadius()) / static_cast<double>(trialSize);
+    //this->test();
+    this->doReplications();
 }
 void Pilot::operator=(const Pilot& pilotName){
     this->meanX = pilotName.meanX;
@@ -150,13 +151,4 @@ void Pilot::doReplications(){
         }
         std::cout << '\n';
     }
-}
-void Pilot::operator<<(const Pilot& pilotName){
-    std::cout << "X standard deviation: " << pilotName.stdevX << '\n'
-        << "Y standard deviation: " << pilotName.stdevY << '\n' 
-        << "Probability of the pilot hitting the target: " << pilotName.probHitTarget;
-}
-void Pilot::operator>>(const Pilot& pilotName){
-    std::cin >> pilotName.meanX >> pilotName.meanY >> pilotName.probHitTarget
-        >> pilotName.confidenceInterval;
 }
