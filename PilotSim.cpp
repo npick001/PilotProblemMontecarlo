@@ -40,31 +40,6 @@ Pilot::Pilot(const Pilot& pilotName) {
         this->normalY[i] = pilotName.normalY[i];
     }
 }
-double rationalApprox(double t){
-    // Abramowitz and Stegun formula 26.2.23.
-    // The absolute value of the error should be less than 4.5 e-4.
-    double c[] = {2.515517, 0.802853, 0.010328};
-    double d[] = {1.432788, 0.189269, 0.001308};
-    return t - ((c[2]*t + c[1])*t + c[0]) / 
-               (((d[2]*t + d[1])*t + d[0])*t + 1.0);
-}
-double normalInversePoints(double prob){
-    if (prob <= 0.0 || prob >= 1.0)
-    {
-        std::cout << "Invalid argument, " << prob 
-        << "should be between 0 and 1." << std::endl;
-    }
-    if (prob < 0.5)
-    {
-        // F^-1(p) = - G^-1(p)
-        return -(rationalApprox(sqrt(-2.0*log(prob))));
-    }
-    else
-    {
-        // F^-1(p) = G^-1(1-p)
-        return rationalApprox(sqrt(-2.0*log(1-prob)));
-    }
-}
 
 std::default_random_engine generator; 
 double Pilot::getRand(double stdev, double mean){

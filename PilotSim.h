@@ -22,8 +22,6 @@ public:
     Pilot(const Pilot& pilotName);
     void run();
     void generateRandPoints();
-    double rationalApprox(double x);
-    double normalInversePoints(double prob);
     double getRand(double stdev, double mean);
     double getTvalue();
     double getVariance();
