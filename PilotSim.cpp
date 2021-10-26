@@ -69,7 +69,7 @@ int Pilot::inRadius(){
     this->avgDistance /= trialSize;
     return underDistance;
 }
-void Pilot::test(){
+/*void Pilot::test(){
     for(int i = 0; i < trialSize; i++){
         std::cout << std::setprecision(7) << this->normalX[i] << ", " 
         << this->normalY[i] << std::endl;
@@ -80,12 +80,11 @@ void Pilot::test(){
     std::cout << "Average Distance: " << this->avgDistance << '\n';
     std::cout << "Probability of hitting target within radius: "
         << this->probHitTarget << '\n';
-}
+}*/
 void Pilot::run(){
     this->generateRandPoints();
     this->probHitTarget = static_cast<double>(this->inRadius()) / static_cast<double>(trialSize);
     //this->test();
-    this->doReplications();
 }
 void Pilot::operator=(const Pilot& pilotName){
     this->meanX = pilotName.meanX;
@@ -116,39 +115,46 @@ double Pilot::getTvalue(){
 }
 double Pilot::getVariance(){
     double total = 0;
-    for(int i = 0; i < replications; i++){
+    for(int i = 1; i < replications; i++){
         total += pow((this->outcomes[i] - this->finalMean),2);
     }
-    return (total / (replications - 1));
+    return (total / static_cast<double> (replications - 3));
 }
 double Pilot::getFinalMean(){
     double total = 0;
-    for(int i = 0; i < replications; i++){
-        total += outcomes[i];
+    for(int i = 1; i < replications; i++){
+        total = total + outcomes[i];
     }
-    return (total / replications);
+    return (total / static_cast<double> (replications-2));
+}
+void Pilot::output(){
+    for(int i = 1; i < replications; i++){
+        std::cout << std::setw(12) << i << std::setw(8) << outcomes[i] << '\n';
+    }
+    this->finalMean = this->getFinalMean();
+    double variance = this->getVariance();
+    this->t = this->getTvalue();
+    double lowerCI = finalMean - t * sqrt(this->getVariance()/static_cast<double> (trialSize));
+    double upperCI = finalMean + t * sqrt(this->getVariance()/static_cast<double> (trialSize));
+    if (lowerCI >= upperCI){
+        double temp = lowerCI;
+        lowerCI = upperCI;
+        upperCI = temp;
+    }
+    std::cout << "Mean: " << finalMean << '\n' << "Variance: " << variance << '\n' << "Confidence Interval: " << confidenceInterval 
+            << '\n' << "Alpha: " << alpha << '\n' << "t: " << t << '\n' << "With a " << (confidenceInterval * 100) << "% Confidence Interval, " << '\n'
+            << "the probability of the pilot " << '\n' << "hitting the target is in the interval: " << lowerCI << " < x < " << upperCI << '\n';
+    std::cout << '\n';
 }
 void Pilot::doReplications(){
-    std::cout << "Replication: " << "Outcome: " << "Mean: " << "Confidence Interval: " 
-        << "Alpha: " << "   t: " << std::endl;
-    for(int i = 1; i <= replications; i++){
+    std::cout << "Replication: " << "Outcome: " << '\n';
+    for(int i = 0; i < replications; i++){
         this->run();
-        outcomes[i-1] = this->probHitTarget;
-        std::cout << std::setw(10) << i << std::setw(10) << outcomes[i-1] 
-        << std::setw(6) << this->getFinalMean();
-        if (i == 1){
-            std::cout << std::setw(21) << confidenceInterval << std::setw(7)
-                << alpha << "   " << this->getTvalue();
-        }  
-        if (i == 3){
-            std::cout << std::setw(27) << "Mean is between ";
-        } 
-        if (i == 4){
-            std::cout << std::setw(17) 
-                << (this->getFinalMean() - t * sqrt(this->getVariance()/trialSize))
-                << "   "
-                << (this->getFinalMean() + t * sqrt(this->getVariance()/trialSize));
+        this->outcomes[i] = this->probHitTarget;
+        if (outcomes[i] > 1){
+            std::cout << "Output " << i << " is not below 1.";
+            break;
         }
-        std::cout << '\n';
     }
+    this->output();
 }

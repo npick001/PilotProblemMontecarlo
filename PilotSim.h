@@ -1,6 +1,6 @@
 
 const int trialSize = 10000;
-const int replications = 15;
+const int replications = 25;
 //Represents each Pilot we would like to test
 class Pilot{
     double meanX;
@@ -15,7 +15,7 @@ class Pilot{
     double normalX[trialSize];
     double normalY[trialSize];
 public:
-    double outcomes[replications];
+    double outcomes[replications+2];
     double confidenceInterval;
     double alpha;
     double t;
@@ -38,7 +38,8 @@ public:
     double getProbHitTarget(){return probHitTarget;}
     double *getnX(){return normalX;}
     double *getnY(){return normalY;}
-    void test();
+    //void test();
+    void output();
     void operator=(const Pilot& pilotName);
     bool operator<(const Pilot& pilotName);
     bool operator>(const Pilot& pilotName);
