@@ -1,6 +1,6 @@
 
 const int trialSize = 10000;
-const int replications = 25;
+const int replications = 50;
 //Represents each Pilot we would like to test
 class Pilot{
     double meanX;
