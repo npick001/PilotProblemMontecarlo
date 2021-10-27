@@ -1,6 +1,11 @@
 ## PilotProblemMonteCarloSim
 
-#Problem excel solution posted. C++ program is almost finished.
+#Problem excel solution posted. C++ program is finished.
+
+c++ program limitations: 
+first and last outcomes are throwing random values and skewing data.
+no dynamic allocation of the arrays.
+no command line pilot input.
 
 Problem Description:
 
